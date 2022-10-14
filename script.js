@@ -74,6 +74,10 @@ function pressOperator(operator) {
         equalSign = '';
         updateOperationDisplay();
         resetDisplay();
+    // } else if(operation !== '' && equalSign !== '=' && display.textContent !== '') {
+    //     pressEquals()
+    //     operation = operator.textContent;
+    //     updateOperationDisplay();
     } else {
         operation = operator.textContent;
         firstNum = display.textContent;
@@ -120,3 +124,15 @@ function deleteNum() {
 
 const deleteButton = document.getElementById('delete');
 deleteButton.addEventListener('click', () => deleteNum());
+
+const point = document.getElementById('point');
+
+function insertPoint() {
+    if (display.textContent.includes('.')) {
+        return;
+    } else {
+        updateDisplay('.')
+    }
+};
+
+point.addEventListener('click', () => insertPoint());
