@@ -38,7 +38,7 @@ function operate(operation, a, b) {
             return multiply(a, b);
         case '\u00F7':
             if (b === 0) {
-                return 'ERROR';
+                return '**ERROR!**';
             } else {
                 return divide(a, b);
             };
@@ -46,7 +46,11 @@ function operate(operation, a, b) {
 };
 
 function updateDisplay(n) {
-    display.textContent += n;
+    if (display.textContent.length < 10) {
+        display.textContent += n;
+    } else {
+        display.textContent = '*OVERFLOW*';
+    }
 };
 
 function resetDisplay() {
@@ -66,7 +70,9 @@ nums.forEach(num =>
 const operators = Array.from(document.querySelectorAll('.operator'));
 
 function pressOperator(operator) {
-    if (equalSign === '=') {
+    if (display.textContent === '*OVERFLOW*' || display.textContent === '**ERROR!**') {
+        return;
+    } else if (equalSign === '=') {
         resetOperationDisplay();
         firstNum = display.textContent;
         operation = operator.textContent;
@@ -74,10 +80,17 @@ function pressOperator(operator) {
         equalSign = '';
         updateOperationDisplay();
         resetDisplay();
-    // } else if(operation !== '' && equalSign !== '=' && display.textContent !== '') {
-    //     pressEquals()
-    //     operation = operator.textContent;
-    //     updateOperationDisplay();
+    } else if(operation !== '' && equalSign !== '=' && display.textContent !== '') {
+        pressEquals()
+        firstNum = display.textContent;
+        nextNum = '';
+        equalSign = '';
+        operation = operator.textContent;
+        updateOperationDisplay();
+        resetDisplay();
+    } else if (display.textContent === '') {
+        operation = operator.textContent;
+        updateOperationDisplay();
     } else {
         operation = operator.textContent;
         firstNum = display.textContent;
@@ -93,11 +106,15 @@ operators.forEach(operator =>
 const equals = document.getElementById('equals');
 
 function pressEquals() {
+    if (display.textContent === '*OVERFLOW*' || display.textContent === '**ERROR!**') {
+        return;
+    } else {
     nextNum = display.textContent;
     equalSign = '=';
     updateOperationDisplay();
     display.textContent = operate(operation, firstNum, nextNum);
     firstNum = display.textContent;
+    }
 };
 
 equals.addEventListener('click', () =>
@@ -117,9 +134,13 @@ const clearButton = document.getElementById('clear');
 clearButton.addEventListener('click',() => clear());
 
 function deleteNum() {
-    let numString = display.textContent;
-    numString = numString.slice(0, -1);
-    display.textContent = numString;
+    if (display.textContent === '*OVERFLOW*' || display.textContent === '**ERROR!**') {
+        clear();
+    } else {
+        let numString = display.textContent;
+        numString = numString.slice(0, -1);
+        display.textContent = numString;
+    }
 };
 
 const deleteButton = document.getElementById('delete');
